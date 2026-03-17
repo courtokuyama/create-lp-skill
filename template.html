@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="{{META_DESCRIPTION}}">
+<meta property="og:title" content="{{OG_TITLE}}">
+<meta property="og:description" content="{{OG_DESCRIPTION}}">
+<meta property="og:type" content="website">
+<title>{{PAGE_TITLE}}</title>
+<link rel="icon" href="data:image/svg+xml,{{FAVICON_SVG}}">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Noto+Sans+JP:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* ═══════════════════════════════════════
+     THEME — Tone A: ビジネスSaaS型
+     Tone Bの場合はguidelinesのTone B変数に差し替え
+     ═══════════════════════════════════════ */
+  :root {
+    --bg: #ffffff;
+    --bg-alt: #f5f6f8;
+    --bg-dark: #1a1e2e;
+    --text: #1e2330;
+    --text-sub: #555e6e;
+    --text-light: #8891a0;
+    --accent: #2563eb;
+    --accent-light: #eef2ff;
+    --accent-dark: #1a4fcc;
+    --border: #e5e7eb;
+    --green: #0d9f6e;
+    --red: #dc3545;
+    --yellow: #d9880b;
+    --radius: 8px;
+    --radius-lg: 16px;
+    --max-w: 1100px;
+  }
+
+  /* ─── RESET ─── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Noto Sans JP', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg); color: var(--text); line-height: 1.8; font-size: 15px;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; text-decoration: none; }
+  img { max-width: 100%; height: auto; display: block; }
+
+  /* ─── UTILITY ─── */
+  .container { max-width: var(--max-w); margin: 0 auto; padding: 0 40px; }
+  .section-label {
+    font-size: 12px; font-weight: 700; letter-spacing: 0.15em;
+    text-transform: uppercase; color: var(--accent); margin-bottom: 12px;
+  }
+  .section-title {
+    font-size: clamp(24px, 3vw, 36px); font-weight: 800;
+    letter-spacing: -0.5px; line-height: 1.4;
+  }
+  .section-sub {
+    font-size: 15px; color: var(--text-sub); line-height: 2; margin-top: 12px;
+  }
+
+  /* ─── NAV ─── */
+  .nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+    background: rgba(255,255,255,0.96); backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border); height: 68px;
+  }
+  .nav-inner {
+    max-width: 1200px; margin: 0 auto; padding: 0 40px;
+    display: flex; align-items: center; height: 100%;
+  }
+  .nav-logo {
+    font-size: 20px; font-weight: 800; letter-spacing: -0.5px; margin-right: auto;
+  }
+  .nav-logo span:first-child { color: var(--accent); }
+  .nav-cta {
+    background: var(--accent); color: #fff; border: none;
+    padding: 10px 24px; border-radius: 99px; font-size: 14px;
+    font-weight: 600; cursor: pointer; font-family: inherit;
+    transition: background 0.2s;
+  }
+  .nav-cta:hover { background: var(--accent-dark); }
+
+  /* ─── HERO ─── */
+  .hero {
+    padding: 140px 0 80px; position: relative; overflow: hidden;
+  }
+  .hero-inner {
+    max-width: var(--max-w); margin: 0 auto; padding: 0 40px;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center;
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    color: var(--accent); background: var(--accent-light);
+    padding: 6px 14px; border-radius: 99px;
+    font-size: 12px; font-weight: 600; margin-bottom: 20px;
+  }
+  .hero h1 {
+    font-size: clamp(28px, 3.2vw, 42px); font-weight: 800;
+    letter-spacing: -0.5px; line-height: 1.5;
+  }
+  .hero-sub {
+    font-size: 15px; color: var(--text-sub); line-height: 1.9;
+    margin-top: 16px;
+  }
+  .hero-actions { display: flex; gap: 12px; margin-top: 32px; flex-wrap: wrap; }
+  .btn-primary {
+    background: var(--accent); color: #fff; border: none;
+    padding: 16px 40px; border-radius: 99px;
+    font-size: 16px; font-weight: 700; cursor: pointer; font-family: inherit;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .btn-primary:hover { background: var(--accent-dark); transform: translateY(-2px); }
+  .btn-ghost {
+    background: transparent; color: var(--text-sub);
+    border: 1px solid var(--border); padding: 15px 32px;
+    border-radius: 99px; font-size: 15px; font-weight: 500;
+    cursor: pointer; font-family: inherit; transition: border-color 0.2s, color 0.2s;
+  }
+  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+  .hero-note { font-size: 13px; color: var(--text-light); margin-top: 12px; }
+
+  /* ─── SCREEN MOCK (macOS) ─── */
+  .screen-mock {
+    background: var(--bg-dark); border-radius: var(--radius-lg);
+    overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+  }
+  .screen-titlebar {
+    display: flex; align-items: center; gap: 6px;
+    padding: 12px 16px; background: rgba(255,255,255,0.06);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .dot { width: 10px; height: 10px; border-radius: 50%; }
+  .dot.red { background: #ff5f57; }
+  .dot.yellow { background: #febc2e; }
+  .dot.green { background: #28c840; }
+  .screen-url {
+    margin-left: 12px; font-size: 11px; color: rgba(255,255,255,0.4);
+    font-family: 'DM Mono', monospace;
+  }
+  .screen-body { padding: 20px; }
+  .screen-tabs {
+    display: flex; gap: 0; border-bottom: 1px solid rgba(255,255,255,0.1);
+    padding: 0 16px;
+  }
+  .screen-tab-item {
+    padding: 10px 16px; font-size: 12px; color: rgba(255,255,255,0.4);
+    cursor: pointer; border-bottom: 2px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .screen-tab-item.active { color: #fff; border-bottom-color: var(--accent); }
+
+  /* ─── FLOAT CARDS ─── */
+  .float-card {
+    position: absolute; background: #fff; border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 12px 16px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+    animation: float 6s ease-in-out infinite;
+  }
+  .float-card .fc-val { font-size: 14px; font-weight: 700; display: block; }
+  .float-card .fc-sub { font-size: 11px; color: var(--text-light); margin-top: 2px; }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+
+  /* ─── PAIN / 課題提起 ─── */
+  .pain-section {
+    background: var(--bg-alt); border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border); padding: 80px 0;
+  }
+  .pain-list { display: grid; gap: 16px; margin-top: 40px; }
+  .pain-item {
+    background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 24px 28px; font-size: 15px; color: var(--text); line-height: 1.8;
+  }
+
+  /* ─── SOLUTION / Before-After ─── */
+  .solution-section { padding: 80px 0; }
+  .ba-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-top: 40px;
+  }
+  .ba-card {
+    border: 1px solid var(--border); border-radius: var(--radius-lg);
+    padding: 32px; background: var(--bg);
+  }
+  .ba-card.after { border-color: var(--accent); }
+  .ba-label {
+    font-size: 12px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.1em; margin-bottom: 16px; color: var(--text-light);
+  }
+  .ba-card.after .ba-label { color: var(--accent); }
+  .ba-item {
+    padding: 10px 0; font-size: 14px; color: var(--text-sub);
+    border-bottom: 1px solid var(--border);
+  }
+  .ba-item:last-child { border-bottom: none; }
+  .ba-highlight { color: var(--accent); font-weight: 700; }
+
+  /* ─── POINTS OVERVIEW / 機能一覧 ─── */
+  .points-section { padding: 80px 0; }
+  .points-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0; margin-top: 40px;
+    border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden;
+  }
+  .point-card {
+    padding: 28px 20px; border-right: 1px solid var(--border);
+    cursor: pointer; transition: background 0.2s;
+  }
+  .point-card:last-child { border-right: none; }
+  .point-card:hover { background: var(--accent-light); }
+  .point-num { font-size: 28px; font-weight: 800; color: var(--accent); font-family: 'DM Mono', monospace; }
+  .point-title { font-size: 14px; font-weight: 600; margin-top: 8px; }
+  .point-desc { font-size: 12px; color: var(--text-sub); margin-top: 4px; line-height: 1.6; }
+
+  /* ─── POINT DETAIL / 機能詳細 ─── */
+  .detail-section { padding: 60px 0; border-top: 1px solid var(--border); }
+  .detail-inner {
+    max-width: var(--max-w); margin: 0 auto; padding: 0 40px;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center;
+  }
+  .detail-inner.reverse { direction: rtl; }
+  .detail-inner.reverse > * { direction: ltr; }
+  .detail-num {
+    color: var(--accent); font-size: 14px; font-weight: 700;
+    font-family: 'DM Mono', monospace; margin-bottom: 8px;
+  }
+  .detail-title {
+    font-size: clamp(20px, 2.4vw, 28px); font-weight: 700; line-height: 1.5;
+  }
+  .detail-desc {
+    font-size: 15px; color: var(--text-sub); line-height: 2; margin-top: 12px;
+  }
+  .detail-desc em { font-style: normal; color: var(--accent); font-weight: 600; }
+
+  /* ─── DEMO (dark bg) ─── */
+  .demo-section {
+    background: var(--bg-dark); padding: 80px 0; color: #fff;
+  }
+  .demo-stepper {
+    display: flex; gap: 0; justify-content: center; margin-bottom: 40px;
+  }
+  .demo-step {
+    padding: 10px 24px; font-size: 13px; font-weight: 600;
+    color: rgba(255,255,255,0.4); border-bottom: 2px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .demo-step.active { color: #fff; border-bottom-color: var(--accent); }
+  .demo-panel { display: none; }
+  .demo-panel.active { display: block; }
+  .demo-btn {
+    width: 100%; padding: 14px; border: none; border-radius: var(--radius);
+    background: var(--accent); color: #fff; font-size: 14px; font-weight: 700;
+    cursor: pointer; font-family: inherit; transition: background 0.2s;
+    margin-top: 16px;
+  }
+  .demo-btn:hover { background: var(--accent-dark); }
+  .demo-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  @keyframes btnPulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(37,99,235,0.4); }
+    50% { box-shadow: 0 0 0 8px rgba(37,99,235,0); }
+  }
+  .demo-btn-pulse { animation: btnPulse 2s infinite; }
+
+  /* ─── METRICS / 数字 ─── */
+  .metrics-section {
+    padding: 80px 0; text-align: center;
+  }
+  .metrics-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 40px; margin-top: 48px;
+  }
+  .metric-num {
+    font-size: clamp(36px, 5vw, 56px); font-weight: 800; color: var(--accent);
+    font-family: 'DM Mono', monospace; letter-spacing: -2px;
+  }
+  .metric-unit { font-size: 0.5em; }
+  .metric-label { font-size: 14px; color: var(--text-sub); margin-top: 4px; }
+
+  /* ─── FAQ ─── */
+  .faq-section { padding: 80px 0; }
+  .faq-list { max-width: 760px; margin: 40px auto 0; }
+  .faq-item {
+    border-bottom: 1px solid var(--border); padding: 20px 0;
+  }
+  .faq-q {
+    font-size: 15px; font-weight: 600; cursor: pointer;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .faq-q::after { content: '+'; font-size: 20px; color: var(--text-light); transition: transform 0.2s; }
+  .faq-item.open .faq-q::after { transform: rotate(45deg); }
+  .faq-a {
+    max-height: 0; overflow: hidden; transition: max-height 0.3s ease;
+    font-size: 14px; color: var(--text-sub); line-height: 1.9;
+  }
+  .faq-item.open .faq-a { max-height: 200px; padding-top: 12px; }
+
+  /* ─── CTA (dark bg) ─── */
+  .cta-section {
+    background: var(--bg-dark); padding: 80px 0; text-align: center; color: #fff;
+  }
+  .cta-section .section-label { color: rgba(255,255,255,0.5); }
+  .cta-title {
+    font-size: clamp(24px, 3vw, 36px); font-weight: 800; margin-top: 8px;
+  }
+  .cta-sub { color: rgba(255,255,255,0.6); font-size: 15px; margin-top: 12px; }
+  .cta-actions { margin-top: 32px; }
+
+  /* ─── FOOTER ─── */
+  .footer {
+    padding: 40px 0; text-align: center;
+    font-size: 12px; color: var(--text-light);
+    border-top: 1px solid var(--border);
+  }
+
+  /* ─── MOBILE ─── */
+  @media (max-width: 768px) {
+    .container { padding: 0 20px; }
+    .nav-inner { padding: 0 20px; }
+    .hero { padding: 100px 0 60px; }
+    .hero-inner { grid-template-columns: 1fr; gap: 32px; padding: 0 20px; }
+    .hero-visual { order: -1; }
+    .ba-grid { grid-template-columns: 1fr; }
+    .detail-inner { grid-template-columns: 1fr; gap: 32px; padding: 0 20px; }
+    .detail-inner.reverse { direction: ltr; }
+    .float-card { display: none; }
+    .points-grid { grid-template-columns: 1fr; }
+    .point-card { border-right: none; border-bottom: 1px solid var(--border); }
+    .point-card:last-child { border-bottom: none; }
+    .metrics-grid { grid-template-columns: 1fr 1fr; gap: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══ NAV ═══ -->
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="nav-logo"><span>{{BRAND}}</span><span>{{BRAND_SUFFIX}}</span></div>
+    <a href="#contact-form" class="nav-cta">{{CTA_TEXT}}</a>
+  </div>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-text">
+      <div class="hero-badge">{{HERO_BADGE}}</div>
+      <h1>{{HERO_TITLE}}</h1>
+      <p class="hero-sub">{{HERO_SUB}}</p>
+      <div class="hero-actions">
+        <a href="#contact-form" class="btn-primary">{{CTA_TEXT}}</a>
+        <a href="#features" class="btn-ghost">機能を見る</a>
+      </div>
+      <p class="hero-note">{{HERO_NOTE}}</p>
+    </div>
+    <div class="hero-visual">
+      <!-- macOSモック or プロダクトビジュアル -->
+      <div class="screen-mock">
+        <div class="screen-titlebar">
+          <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+          <span class="screen-url">{{APP_URL}}</span>
+        </div>
+        <div class="screen-body">
+          <!-- ここにダッシュボードモック -->
+        </div>
+      </div>
+      <!-- フローティングカード（PC装飾、モバイル非表示） -->
+      <div class="float-card" style="top:10%; right:-20px;">
+        <span class="fc-val">{{FLOAT_1_VAL}}</span>
+        <span class="fc-sub">{{FLOAT_1_LABEL}}</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ PAIN / 課題提起 ═══ -->
+<section class="pain-section">
+  <div class="container" style="text-align:center;">
+    <div class="section-label">Problem</div>
+    <div class="section-title">こんなお悩みありませんか？</div>
+    <div class="pain-list" style="max-width:640px; margin-left:auto; margin-right:auto;">
+      <div class="pain-item">{{PAIN_1}}</div>
+      <div class="pain-item">{{PAIN_2}}</div>
+      <div class="pain-item">{{PAIN_3}}</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ SOLUTION / Before-After ═══ -->
+<section class="solution-section">
+  <div class="container" style="text-align:center;">
+    <div class="section-label">Solution</div>
+    <div class="section-title">{{SOLUTION_TITLE}}</div>
+    <p class="section-sub">{{SOLUTION_SUB}}</p>
+    <div class="ba-grid">
+      <div class="ba-card">
+        <div class="ba-label">Before</div>
+        <div class="ba-item">{{BEFORE_1}}</div>
+        <div class="ba-item">{{BEFORE_2}}</div>
+        <div class="ba-item">{{BEFORE_3}}</div>
+      </div>
+      <div class="ba-card after">
+        <div class="ba-label">After</div>
+        <div class="ba-item"><span class="ba-highlight">{{AFTER_1}}</span></div>
+        <div class="ba-item"><span class="ba-highlight">{{AFTER_2}}</span></div>
+        <div class="ba-item"><span class="ba-highlight">{{AFTER_3}}</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ POINTS OVERVIEW / 機能一覧 ═══ -->
+<section class="points-section" id="features">
+  <div class="container" style="text-align:center;">
+    <div class="section-label">Features</div>
+    <div class="section-title">{{FEATURES_TITLE}}</div>
+    <div class="points-grid">
+      <a href="#point-01" class="point-card">
+        <div class="point-num">01</div>
+        <div class="point-title">{{POINT_01_TITLE}}</div>
+        <div class="point-desc">{{POINT_01_DESC}}</div>
+      </a>
+      <a href="#point-02" class="point-card">
+        <div class="point-num">02</div>
+        <div class="point-title">{{POINT_02_TITLE}}</div>
+        <div class="point-desc">{{POINT_02_DESC}}</div>
+      </a>
+      <a href="#point-03" class="point-card">
+        <div class="point-num">03</div>
+        <div class="point-title">{{POINT_03_TITLE}}</div>
+        <div class="point-desc">{{POINT_03_DESC}}</div>
+      </a>
+      <!-- 必要に応じて04, 05を追加 -->
+    </div>
+  </div>
+</section>
+
+<!-- ═══ POINT DETAIL 01 ═══ -->
+<section class="detail-section" id="point-01">
+  <div class="detail-inner">
+    <div>
+      <div class="detail-num">POINT 01</div>
+      <h3 class="detail-title">{{POINT_01_DETAIL_TITLE}}</h3>
+      <p class="detail-desc">{{POINT_01_DETAIL_DESC}}</p>
+    </div>
+    <div>
+      <!-- プロダクトモック -->
+      <div class="screen-mock">
+        <div class="screen-titlebar">
+          <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+          <span class="screen-url">{{APP_URL}}/{{POINT_01_PATH}}</span>
+        </div>
+        <div class="screen-body"><!-- モック内容 --></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ POINT DETAIL 02 (reverse) ═══ -->
+<section class="detail-section" id="point-02">
+  <div class="detail-inner reverse">
+    <div>
+      <div class="detail-num">POINT 02</div>
+      <h3 class="detail-title">{{POINT_02_DETAIL_TITLE}}</h3>
+      <p class="detail-desc">{{POINT_02_DETAIL_DESC}}</p>
+    </div>
+    <div>
+      <div class="screen-mock">
+        <div class="screen-titlebar">
+          <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+          <span class="screen-url">{{APP_URL}}/{{POINT_02_PATH}}</span>
+        </div>
+        <div class="screen-body"><!-- モック内容 --></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ POINT DETAIL 03 ═══ -->
+<section class="detail-section" id="point-03">
+  <div class="detail-inner">
+    <div>
+      <div class="detail-num">POINT 03</div>
+      <h3 class="detail-title">{{POINT_03_DETAIL_TITLE}}</h3>
+      <p class="detail-desc">{{POINT_03_DETAIL_DESC}}</p>
+    </div>
+    <div>
+      <div class="screen-mock">
+        <div class="screen-titlebar">
+          <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+          <span class="screen-url">{{APP_URL}}/{{POINT_03_PATH}}</span>
+        </div>
+        <div class="screen-body"><!-- モック内容 --></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ DEMO ═══ -->
+<section class="demo-section" id="demo">
+  <div class="container" style="text-align:center;">
+    <div class="section-label" style="color:rgba(255,255,255,0.5);">Live Demo</div>
+    <div class="section-title" style="color:#fff;">{{DEMO_TITLE}}</div>
+
+    <div class="demo-stepper">
+      <div class="demo-step active" data-step="1">Step 1: {{STEP_1_LABEL}}</div>
+      <div class="demo-step" data-step="2">Step 2: {{STEP_2_LABEL}}</div>
+      <div class="demo-step" data-step="3">Step 3: {{STEP_3_LABEL}}</div>
+    </div>
+
+    <div class="demo-panel active" data-step="1">
+      <!-- Step 1 content -->
+      <button class="demo-btn demo-btn-pulse" id="demo-btn-1">{{STEP_1_BTN}} →</button>
+    </div>
+    <div class="demo-panel" data-step="2">
+      <!-- Step 2 content -->
+      <button class="demo-btn demo-btn-pulse" id="demo-btn-2">{{STEP_2_BTN}} →</button>
+    </div>
+    <div class="demo-panel" data-step="3">
+      <!-- Step 3 content (result mock) -->
+      <button class="demo-btn" id="demo-btn-reset">最初から</button>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ METRICS / 数字 ═══ -->
+<section class="metrics-section" id="metrics">
+  <div class="container">
+    <div style="text-align:center;">
+      <div class="section-label">Numbers</div>
+      <div class="section-title">{{METRICS_TITLE}}</div>
+    </div>
+    <div class="metrics-grid">
+      <div>
+        <div class="metric-num">{{METRIC_1_NUM}}<span class="metric-unit">{{METRIC_1_UNIT}}</span></div>
+        <div class="metric-label">{{METRIC_1_LABEL}}</div>
+      </div>
+      <div>
+        <div class="metric-num">{{METRIC_2_NUM}}<span class="metric-unit">{{METRIC_2_UNIT}}</span></div>
+        <div class="metric-label">{{METRIC_2_LABEL}}</div>
+      </div>
+      <div>
+        <div class="metric-num">{{METRIC_3_NUM}}<span class="metric-unit">{{METRIC_3_UNIT}}</span></div>
+        <div class="metric-label">{{METRIC_3_LABEL}}</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FAQ ═══ -->
+<section class="faq-section" id="faq">
+  <div class="container" style="text-align:center;">
+    <div class="section-label">FAQ</div>
+    <div class="section-title">よくある質問</div>
+  </div>
+  <div class="faq-list">
+    <div class="faq-item">
+      <div class="faq-q">{{FAQ_1_Q}}</div>
+      <div class="faq-a">{{FAQ_1_A}}</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">{{FAQ_2_Q}}</div>
+      <div class="faq-a">{{FAQ_2_A}}</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">{{FAQ_3_Q}}</div>
+      <div class="faq-a">{{FAQ_3_A}}</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">{{FAQ_4_Q}}</div>
+      <div class="faq-a">{{FAQ_4_A}}</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CTA ═══ -->
+<section class="cta-section" id="contact-form">
+  <div class="container">
+    <div class="section-label">Get Started</div>
+    <div class="cta-title">{{CTA_TITLE}}</div>
+    <p class="cta-sub">{{CTA_SUB}}</p>
+    <div class="cta-actions">
+      <!-- Tally.so or external form -->
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer class="footer">
+  <div class="container">
+    &copy; {{YEAR}} {{COMPANY}}. All rights reserved.
+  </div>
+</footer>
+
+<script>
+(function(){
+  /* ─── FAQ toggle ─── */
+  document.querySelectorAll('.faq-q').forEach(function(q){
+    q.addEventListener('click', function(){
+      this.parentElement.classList.toggle('open');
+    });
+  });
+
+  /* ─── Demo stepper ─── */
+  var step = 1;
+  var running = false;
+  var autoStarted = false;
+
+  function $(sel){ return document.querySelector(sel); }
+  function $$(sel){ return document.querySelectorAll(sel); }
+
+  function showPanel(n){
+    $$('.demo-panel').forEach(function(p){ p.classList.remove('active'); });
+    var target = $('.demo-panel[data-step="'+n+'"]');
+    if(target) target.classList.add('active');
+    $$('.demo-step').forEach(function(s){ s.classList.remove('active'); });
+    var stepEl = $('.demo-step[data-step="'+n+'"]');
+    if(stepEl) stepEl.classList.add('active');
+  }
+
+  function goTo(n){ step = n; showPanel(n); }
+
+  /* ─── Step functions — customize per project ─── */
+  function runStep1(){
+    if(running) return; running = true;
+    var btn = $('#demo-btn-1'); btn.disabled = true;
+    // TODO: Add step 1 animation
+    setTimeout(function(){
+      running = false; btn.textContent = '次へ →'; btn.disabled = false;
+      btn.onclick = function(){ goTo(2); };
+    }, 2000);
+  }
+
+  function runStep2(){
+    if(running) return; running = true;
+    var btn = $('#demo-btn-2'); btn.disabled = true;
+    // TODO: Add step 2 animation
+    setTimeout(function(){
+      running = false; btn.textContent = '結果を見る →'; btn.disabled = false;
+      btn.onclick = function(){ goTo(3); };
+    }, 2000);
+  }
+
+  function resetDemo(){
+    running = false; step = 1; autoStarted = false;
+    var b1 = $('#demo-btn-1');
+    b1.textContent = '{{STEP_1_BTN}} →'; b1.disabled = false; b1.onclick = runStep1;
+    var b2 = $('#demo-btn-2');
+    b2.textContent = '{{STEP_2_BTN}} →'; b2.disabled = false; b2.onclick = runStep2;
+    showPanel(1);
+  }
+
+  /* ─── Init ─── */
+  document.addEventListener('DOMContentLoaded', function(){
+    $('#demo-btn-1').onclick = runStep1;
+    $('#demo-btn-2').onclick = runStep2;
+    $('#demo-btn-reset').onclick = resetDemo;
+    goTo(1);
+
+    /* Auto-start demo on scroll */
+    if('IntersectionObserver' in window){
+      var obs = new IntersectionObserver(function(entries){
+        entries.forEach(function(e){
+          if(e.isIntersecting && !autoStarted && !running && step === 1){
+            autoStarted = true;
+            setTimeout(runStep1, 600);
+          }
+        });
+      }, {threshold: 0.4});
+      var target = $('#demo');
+      if(target) obs.observe(target);
+    }
+  });
+})();
+</script>
+</body>
+</html>
