@@ -1,15 +1,17 @@
 ---
 name: create-lp
-description: LP（ランディングページ）を新規作成するスキル。ヒアリングから構成設計、実装、デプロイまでの全フローを実行する。
+description: LP（ランディングページ）＆ 営業資料（サービス詳細PDF）を作成するスキル。ヒアリングから構成設計、実装、デプロイまでの全フローを実行する。
 argument-hint: [project-name]
 disable-model-invocation: true
 ---
 
-# LP作成スキル
+# LP & 営業資料 作成スキル
 
-デザインガイドラインに従ってLPを作成する。起動時に以下を読み込むこと:
+デザインガイドラインに従ってLP・営業資料を作成する。起動時に以下を読み込むこと:
 - [guidelines.md](guidelines.md) — 設計原則・デザイントーン・コンポーネント仕様
 - [template.html](template.html) — ベーステンプレート（Tone A: SaaS型）をコピーして使う
+
+---
 
 ## Phase 1: ヒアリング（情報収集）
 
@@ -27,9 +29,10 @@ disable-model-invocation: true
 9. **フォームURL** — Tally.so等の外部フォームURL。なければ作成を提案
 
 ### トーン選択（ヒアリング中に判断）
-サービス内容から**Tone A（ビジネスSaaS型）**か**Tone B（ライフスタイル/D2C型）**を判断する。
+サービス内容から**Tone A（ビジネスSaaS型）**か**Tone B（ライフスタイル/D2C型）**か**Tone C（BPO×AI型）**を判断する。
 - BtoB・業務ツール・SaaS → **Tone A**（CFManager系: ソリッド背景、macOSモック）
 - BtoC・ヘルスケア・アプリ・プレミアム → **Tone B**（TUUN系: オーブ背景、グラスモーフィズム）
+- BPO・コンサルティング・AI導入支援 → **Tone C**（気づけばAI系: ダーク背景、写真ヒーロー、比較表、フェーズ型サービス説明）
 - ユーザーが迷っている場合はPhase 2で両方の方針を提示して選んでもらう
 
 ### あれば嬉しい情報
@@ -38,7 +41,7 @@ disable-model-invocation: true
 - ロゴ（SVGが理想）
 - OGP画像
 - 独自ドメインの有無
-- 営業資料（service-doc）も必要か
+- **営業資料（service-doc）も必要か** ← 必ず聞く
 
 ## Phase 2: 構成設計
 
@@ -57,22 +60,17 @@ disable-model-invocation: true
 7. デモ: [何をアニメーションさせるか]
 8. 数字: [KPI 3-4個]
 9. FAQ: [想定Q&A 4-6個]
-10. CTA: [最終コール文言 + フォーム]
-
-### デザイン方針
-- ブランドカラー: [色コード]
-- トーン: [例: プロフェッショナル / カジュアル / テック]
-- 参考に近いスタイル: [TUUNクラブ型 / CFManager型 / カスタム]
+10. CTA: [最終コール文言 + フォーム + 資料内容リスト]
 ```
 
 ユーザーの合意を得てからPhase 3へ。修正があれば反映して再提示。
 
-## Phase 3: 実装
+## Phase 3: LP実装
 
 ### 3-1. プロジェクトセットアップ
 ```bash
-mkdir -p ~/Desktop/$ARGUMENTS
-cd ~/Desktop/$ARGUMENTS
+mkdir -p ~/Documents/$ARGUMENTS
+cd ~/Documents/$ARGUMENTS
 git init
 ```
 
@@ -81,28 +79,169 @@ git init
 
 **Tone別の作業**:
 - **Tone A（SaaS型）**: template.htmlをそのまま使う。`--accent`をブランドカラーに変更
-- **Tone B（ライフスタイル型）**: template.htmlをベースに以下を差し替え:
-  1. `:root`のCSS変数をTone B用に変更（guidelines.md §8参照）
-  2. フォントをneue-haas-grotesk-display + Hiragino系に変更
-  3. `<body>`直後に`.bg-orbs`オーブ要素を追加
-  4. `.screen-mock`を`.glass-card`に置換（モック不要なケース）
-  5. セクション区切りの`border-top`を削除（余白のみで区切る）
-  6. `.animate`クラスとIntersectionObserver JSを追加
+- **Tone B（ライフスタイル型）**: template.htmlをベースに差し替え（guidelines.md §8参照）
+- **Tone C（BPO×AI型）**: guidelines.md §8-C参照。ダークヒーロー、比較表、フェーズ型カード
 
 **共通で必ず守ること**:
 - CSS変数でテーマ管理（色の直書き禁止）
 - モバイル対応（`@media(max-width:768px)`）
-- IntersectionObserverでデモ自動開始
 - Tally.soフォーム埋め込み or mailto
 - `<div>`の開きと閉じの数が一致していることを確認
 
-### 3-3. 確認
-作成後、ブラウザで開いて確認を促す:
+### 3-3. CTAセクション設計（重要）
+最終CTAセクションには必ず「資料でわかること」リストを入れる:
+```html
+<div style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:24px 28px;margin-bottom:24px">
+  <div style="font-size:14px;font-weight:700;color:rgba(255,255,255,.85);margin-bottom:14px">
+    📄 資料でわかること
+  </div>
+  <ul>
+    <li>● [資料に含まれる具体的な内容1]</li>
+    <li>● [資料に含まれる具体的な内容2]</li>
+    ...
+  </ul>
+</div>
+```
+- フォームの高さは十分に確保し、スクロールなしで全体が表示されるようにする
+- Tally iframeは `height:700px` 以上、コンテナは `height:620px` 以上
+
+### 3-4. 確認
 ```bash
-open ~/Desktop/$ARGUMENTS/index.html
+open ~/Documents/$ARGUMENTS/index.html
 ```
 
-## Phase 4: レビュー＆修正
+## Phase 4: 営業資料（service-doc）作成
+
+LPとセットで営業資料を作る。LPには載せきれない詳細情報を盛り込む。
+
+### 4-1. フォーマット仕様
+- **サイズ**: 1920x1080px（16:9横長スライド形式）
+- **ファイル名**: `service-doc.html`（LP と同じディレクトリに配置）
+- **総スライド数**: 17〜20枚
+
+### 4-2. スライド構成
+```
+1. カバー（サービス名、会社名、連絡先、版数）
+2. 目次（各セクションにページ番号付き）
+3. サービス概要（提供内容 + 対応領域カード）
+4. 実績サマリー（大きい数字4つ + サブ指標4つ）
+5. 事例セクションタイトル（アクセントカラー全面背景）
+6-12. 導入事例 × 7社（左:背景画像 / 右:詳細テキスト）
+13. 導入プロセス（6ステップのタイムライン）
+14. 技術基盤 & セキュリティ（6カード）
+15. 料金体系（3-4プランの比較）
+16. 品質保証（4カード）
+17. エンドスライド（CTA + mailto）
+```
+
+### 4-3. 事例スライドの設計ルール
+```
+┌────────────────────────────────────────────────┐
+│  ┌──────────┐  ┌──────────────────────────────┐ │
+│  │          │  │ [番号] [業種タグ] [企業規模]  │ │
+│  │  背景    │  │                              │ │
+│  │  画像    │  │ ★ 見出し（48px、。で改行）   │ │
+│  │  38%幅   │  │                              │ │
+│  │          │  │ [課題] [導入期間] [使用技術]  │ │
+│  │ gradient │  │                              │ │
+│  │ overlay  │  │ ▎導入前の課題                │ │
+│  │          │  │  本文（18px、詳細に記述）     │ │
+│  │          │  │                              │ │
+│  │          │  │ ▎構築したソリューション       │ │
+│  │          │  │  • 箇条書き3点               │ │
+│  │          │  │                              │ │
+│  │          │  │ ┃ 成果ヘッドライン（24px）   │ │
+│  │          │  │ ┃ 成果の詳細説明             │ │
+│  └──────────┘  └──────────────────────────────┘ │
+│  [ロゴ]                              [ページ番号]│
+└────────────────────────────────────────────────┘
+```
+
+**画像**: `<img>`タグではなく `background-image` + `background-size:cover` を使う（html2canvasの互換性のため）
+**グラデーション**: 画像の右端にCSS疑似要素でフェードオーバーレイ
+**テキスト**: 右側を80%以上テキストで埋める。スカスカにしない
+**見出し**: `。`で改行（`<br>`挿入）。フォントサイズは他ページのセクションタイトルと同等（48px）
+
+### 4-4. PDFダウンロード機能
+**印刷ダイアログ（window.print）は使わない。** ユーザーがA4に変換されて困る。
+
+```html
+<!-- CDN読み込み -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+```
+
+```javascript
+async function downloadPDF(){
+  var btn = document.getElementById('dlBtn');
+  btn.disabled = true;
+  var jsPDF = window.jspdf.jsPDF;
+  var pdf = new jsPDF({
+    orientation:'landscape', unit:'px',
+    format:[1920,1080], hotfixes:['px_scaling'], compress:false
+  });
+  var slides = document.querySelectorAll('.slide');
+  for(var i=0; i<slides.length; i++){
+    var s = slides[i];
+    var origT = s.style.transform;
+    var origM = s.style.marginBottom;
+    s.style.transform = 'none';
+    s.style.marginBottom = '0';
+    var canvas = await html2canvas(s, {
+      width:1920, height:1080, scale:2,
+      useCORS:true, allowTaint:true, logging:false,
+      backgroundColor:'#ffffff', imageTimeout:15000
+    });
+    var img = canvas.toDataURL('image/png');
+    if(i > 0) pdf.addPage();
+    pdf.addImage(img, 'PNG', 0, 0, 1920, 1080, undefined, 'FAST');
+    s.style.transform = origT;
+    s.style.marginBottom = origM;
+  }
+  pdf.save('ファイル名.pdf');
+  btn.disabled = false;
+}
+```
+
+- `scale:2` でレティナ品質
+- `image/png` で色味を正確に保持（JPEGは色が変わる）
+- `compress:false` で圧縮による劣化を防止
+
+### 4-5. PDFビューアーバー
+ページ上部に固定のダークバーを配置:
+```html
+<div class="viewer-bar">
+  <div class="viewer-bar-left">
+    <div class="viewer-bar-icon">📄</div>
+    <div class="viewer-bar-title">ファイル名.pdf</div>
+    <div class="viewer-bar-sub">XX ページ / 会社名</div>
+  </div>
+  <div class="viewer-bar-right">
+    <button class="dl-btn" onclick="downloadPDF()">
+      ⬇ PDFをダウンロード
+    </button>
+  </div>
+</div>
+```
+- 印刷時は `display:none`
+- ボタンは生成中に `disabled` にして「生成中... (3/20)」と進捗表示
+
+### 4-6. スライドのスケーリング（レスポンシブ表示）
+```javascript
+function scaleSlides(){
+  var vw = window.innerWidth;
+  var scale = Math.min(vw/1920, 1);
+  var offsetX = (vw - 1920*scale) / 2;
+  document.querySelectorAll('.slide').forEach(function(s){
+    s.style.transform = 'translateX('+offsetX+'px) scale('+scale+')';
+    s.style.marginBottom = (-(1080*(1-scale))+40)+'px';
+  });
+}
+```
+- `transform-origin: top left` が必須（top centerだと右が切れる）
+- `html, body` に `overflow-x:hidden`
+
+## Phase 5: レビュー＆修正
 
 ユーザーにブラウザで確認してもらい、フィードバックを受けて修正する。
 
@@ -111,29 +250,36 @@ open ~/Desktop/$ARGUMENTS/index.html
 - モバイルでの表示崩れ修正
 - 色味の調整（`--accent`変更）
 - セクションの順序変更
-- モックの内容変更
+- 事例スライドの文字量調整（80%以上埋める）
+- PDFの画質・色味確認
 
 修正のたびに`open`コマンドで再確認を促す。
 
-## Phase 5: デプロイ
+## Phase 6: デプロイ
 
 ### GitHub Pages
 ```bash
-cd ~/Desktop/$ARGUMENTS
-git add index.html
-git commit -m "initial LP"
+cd ~/Documents/$ARGUMENTS
+git add index.html service-doc.html
+git commit -m "LP + 営業資料"
 gh repo create $ARGUMENTS --public --source=. --push
 ```
-GitHub Settings → Pages → main branch → Save を案内。
+GitHub Pages を有効にする:
+```bash
+gh api repos/USERNAME/$ARGUMENTS/pages --method POST \
+  -f build_type=legacy -f source='{"branch":"main","path":"/"}'
+```
 
-### 営業資料が必要な場合
-- `service-doc.html`を別途作成（1280x720スライド形式）
-- Puppeteerで PDF生成
+### LP から資料へのリンク
+LPの最終CTAセクションのフォーム説明文に「資料でわかること」リストを入れ、ユーザーがフォーム送信後に資料ページURLを案内する運用にする。
 
 ## 注意事項
 
-- **ユーザーの判断を仰ぐ**: Phase 2の構成、Phase 4のレビューでは必ず確認を取る
+- **ユーザーの判断を仰ぐ**: Phase 2の構成、Phase 5のレビューでは必ず確認を取る
 - **過剰にしない**: ユーザーが求めていない機能やセクションを勝手に追加しない
 - **正直さ**: フェイクデータ、嘘の実績、架空のレビューは絶対に使わない
 - **速度重視**: 完璧を目指すより、まず動くものを出して修正サイクルを回す
 - **日本語の自然さ**: 翻訳調の日本語にならないように注意。口語的でOK
+- **事例のリアリティ**: 導入事例は具体的な数字・業種・課題を入れて信憑性を出す。ただし担当者名は絶対に入れない
+- **画像はbackground-image**: `<img>`+`object-fit:cover`はhtml2canvasで歪む。必ず`background-image`+`background-size:cover`を使う
+- **PDFはPNG出力**: JPEGだと色味が変わる。`toDataURL('image/png')` + `scale:2`
