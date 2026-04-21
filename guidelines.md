@@ -236,8 +236,8 @@ if('IntersectionObserver' in window){
 .stat-num{font-size:42px;font-weight:900;line-height:1}
 .stat-num em{font-style:normal;font-size:20px;color:var(--accent)}
 .stat-badge{font-size:9px;font-weight:700;color:var(--accent);background:var(--accent-light);padding:2px 8px;border-radius:4px}
-.stat-label{font-size:13px;color:var(--text-sub);min-height:36px;margin-bottom:12px}
-.stat-chart{height:32px;margin-bottom:10px}
+.stat-label{font-size:14px;color:var(--text-sub);font-weight:700;line-height:1.4;margin-bottom:12px}
+.stat-chart{height:56px;margin-bottom:10px}
 .stat-desc{font-size:11px;color:var(--text-light);line-height:1.6;margin-bottom:6px}
 .stat-src{font-size:9px;color:var(--text-light);opacity:.7;text-transform:uppercase}
 ```
@@ -253,11 +253,13 @@ if('IntersectionObserver' in window){
 **ルール:**
 - チャートは装飾ではなく、数字の意味を補強するものを選ぶ
 - 色はアクセントカラーのopacity違いで階調を表現
-- 高さは32pxに統一
+- 高さは56pxに統一（数字と同等の視覚的存在感）
 - SVGはインラインで記述（外部ファイル禁止）
 - ホバーで背景色が変わるインタラクション付き
 - 出典がある場合は`SRC:`プレフィックスで記載
 - バッジは「▼ 削減」「深刻」「最短」等、数字の文脈を示す1-2語
+- ラベルは**太字**(font-weight:700)で、改行禁止（1行に収める）
+- チャートは数字と同じくらい目立つサイズにする（装飾ではなくメインコンテンツ）
 
 ## 7. デプロイ
 
