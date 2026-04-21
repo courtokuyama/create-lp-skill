@@ -261,6 +261,7 @@ if('IntersectionObserver' in window){
 - ラベルは**太字**(font-weight:700)で、`white-space:nowrap`で改行禁止。長い場合はテキストを短くする
 - チャートは数字と同じくらい目立つサイズにする（装飾ではなくメインコンテンツ）
 - SVG内のテキストは薄め（opacity:0.4-0.5）でグラフに重ならない位置に配置する。例: バーの上方に「78」「22」、折れ線の端に「Before」「After」、シールドの横に「TLS 1.3」等
+- **SVGテキストのy座標に注意**: `<text y="6">`等の小さい値はviewBoxの上端で切れる。font-size 10pxなら`y="16"`以上にすること（SVGのtextはy座標がベースライン基準のため、font-sizeの高さ分の余白が必要）
 - タイムラインのステップ名（BPO→AI構築→納品）や棒グラフの軸ラベルはバーの下に配置
 - カード内の各要素（数字・ラベル・チャート・説明）の高さをflex+min-heightで揃えて、4カード横並びで水平に整列
 - `.stat-card{display:flex;flex-direction:column}` + `.stat-top{height:48px}` + `.stat-desc{flex:1}` で各行の高さを統一
