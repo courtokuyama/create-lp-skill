@@ -221,6 +221,136 @@ p.5  アクセント全面   p.19    bg2
 **テキスト**: 右側を80%以上テキストで埋める。スカスカにしない
 **見出し**: `。`で改行（`<br>`挿入）。フォントサイズは他ページのセクションタイトルと同等（48px）
 
+### 4-3b. 資料のデザイントークン（CSS値リファレンス）
+
+明朗会計AI資料で確立したCSS値。新しい資料を作るときはアクセントカラーだけ差し替える。
+
+**スライド共通:**
+```css
+/* ベース */
+.slide{width:1920px;height:1080px;overflow:hidden;display:flex;flex-direction:column;transform-origin:top left}
+.slide-pad{padding:72px 100px}
+.slide-footer{position:absolute;bottom:0;left:0;right:0;height:44px;background:var(--bg2);border-top:1px solid var(--border);padding:0 100px;font-size:13px}
+
+/* テキスト階層 */
+.slide-label{font-size:16px;font-weight:700;color:var(--accent);letter-spacing:.2em;text-transform:uppercase;margin-bottom:10px}
+.slide-title{font-size:52px;font-weight:900;line-height:1.3;margin-bottom:16px;letter-spacing:-.02em}
+.slide-lead{font-size:22px;color:var(--sub);line-height:1.8;max-width:960px}
+```
+
+**カバースライド:**
+```css
+.cover-slide{justify-content:center;align-items:flex-start;text-align:left;padding:100px 120px}
+.cover-slide h1{font-size:80px;font-weight:900;letter-spacing:-.03em}
+.cover-sub{font-size:26px;color:var(--sub);line-height:1.7;margin-bottom:48px}
+.cover-badge{font-size:18px;font-weight:700;padding:10px 36px;border-radius:100px;margin-bottom:40px}
+.cover-meta{font-size:18px;color:var(--muted);line-height:2}
+/* 装飾: ::before/::after で大きな円のグラデーション（opacity .15-.25） */
+```
+
+**事例スライド:**
+```css
+.two-col-img{display:grid;grid-template-columns:38fr 62fr;gap:0;flex:1}
+.case-img-bg{width:100%;height:100%;background-size:cover;background-position:center}
+.case-img-bg::after{/* 右フェード: linear-gradient(90deg,transparent 50%,rgba(255,255,255,.6) 100%) */}
+
+.case-num{width:48px;height:48px;border-radius:50%;font-size:20px;font-weight:900}
+.case-tag{font-size:16px;font-weight:700;padding:6px 18px;border-radius:8px}
+.case-info{font-size:16px;color:var(--muted)}
+
+.case-slide h3{font-size:48px;font-weight:900;line-height:1.25;margin-bottom:16px}  /* 。で<br>改行 */
+.case-meta-row{grid-template-columns:repeat(3,1fr);gap:1px;border-radius:10px}
+.case-meta-label{font-size:13px;font-weight:700;color:var(--muted)}
+.case-meta-val{font-size:17px;font-weight:700}
+
+.case-sub{font-size:14px;font-weight:700;color:var(--accent);letter-spacing:.04em}  /* 「導入前の課題」等 */
+.case-body{font-size:18px;line-height:1.75}
+.case-body li{font-size:18px}
+
+.case-result{background:var(--accent-light);border-left:5px solid var(--accent);border-radius:0 12px 12px 0;padding:18px 22px}
+.case-result .result-headline{font-size:24px;font-weight:900;color:var(--accent)}
+.case-result p{font-size:17px}
+```
+
+**サービス概要:**
+```css
+.svc-grid-4{grid-template-columns:repeat(4,1fr);gap:24px}
+.svc-card{border-radius:16px;padding:32px 24px}
+.svc-num{width:44px;height:44px;border-radius:12px;font-size:18px;font-weight:900}
+.svc-card h4{font-size:19px;font-weight:700}
+.svc-card p{font-size:15px;line-height:1.8}
+/* 対応領域: 2×2グリッドのコンパクトカード */
+.svc-card-sm{border-radius:12px;padding:20px 22px;display:flex;gap:14px}
+.svc-card-sm h5{font-size:16px;font-weight:700}
+.svc-card-sm p{font-size:13px;line-height:1.7}
+```
+
+**実績サマリー:**
+```css
+.stat-row{grid-template-columns:repeat(4,1fr);gap:24px}
+.stat-card{border-radius:16px;padding:40px 28px;text-align:center}
+.stat-num{font-size:64px;font-weight:900;color:var(--accent)}
+.stat-unit{font-size:22px;font-weight:700;color:var(--accent)}
+.stat-label{font-size:17px;color:var(--muted);font-weight:500;margin-top:8px}
+.stat-detail{font-size:14px;color:var(--sub);margin-top:8px;line-height:1.6}
+```
+
+**プロセス:**
+```css
+.timeline-grid{grid-template-columns:repeat(3,1fr);gap:20px}
+.timeline-card{border-radius:16px;padding:28px 24px}
+.timeline-dot{width:40px;height:40px;border-radius:50%;font-size:16px;font-weight:900}
+.timeline-dur{font-size:13px;font-weight:700;color:var(--accent);background:var(--accent-light);padding:3px 12px;border-radius:6px}
+.timeline-card h4{font-size:18px;font-weight:700}
+.timeline-card p{font-size:15px;line-height:1.75}
+```
+
+**技術基盤:**
+```css
+.tech-grid{grid-template-columns:repeat(3,1fr);gap:20px}
+.tech-card{border-radius:16px;padding:32px 24px}
+.tech-icon{width:48px;height:48px;border-radius:12px;font-size:18px;font-weight:900;color:var(--accent)}
+.tech-card h4{font-size:18px;font-weight:700}
+.tech-card p{font-size:15px;line-height:1.75}
+```
+
+**料金:**
+```css
+.price-grid{grid-template-columns:repeat(4,1fr);gap:20px}
+.price-card{border-radius:16px;padding:32px 24px}
+.price-card.featured{border:2px solid var(--accent)}
+.price-badge{top:-16px;font-size:13px;font-weight:700;padding:5px 20px;border-radius:100px}
+.price-name{font-size:14px;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+.price-amount{font-size:38px;font-weight:900}
+.price-list li{font-size:14px;padding:7px 0}
+```
+
+**品質保証:**
+```css
+.guar-grid{grid-template-columns:repeat(2,1fr);gap:20px}
+.guar-card{border-radius:16px;padding:32px 28px;display:flex;gap:20px}
+.guar-num{width:48px;height:48px;border-radius:12px;font-size:20px;font-weight:900}
+.guar-card h4{font-size:20px;font-weight:700}
+.guar-card p{font-size:16px;line-height:1.75}
+```
+
+**エンドスライド:**
+```css
+.end-slide{background:var(--accent);color:#fff;justify-content:center;align-items:center;text-align:center}
+.end-slide h2{font-size:56px;font-weight:900;line-height:1.3}
+.end-slide p{font-size:24px;opacity:.85;max-width:700px}
+.end-btn{padding:20px 64px;border-radius:14px;font-size:22px;font-weight:700}
+```
+
+**PDFビューアーバー:**
+```css
+.viewer-bar{position:fixed;top:0;height:64px;background:#1e293b;z-index:300}
+.viewer-bar-title{color:#fff;font-size:16px;font-weight:700}
+.viewer-bar-sub{color:#94a3b8;font-size:13px}
+.dl-btn{padding:10px 24px;border-radius:8px;font-size:14px;font-weight:700}
+.dl-btn:disabled{background:#64748b;cursor:wait}
+```
+
 ### 4-4. PDFダウンロード機能
 **印刷ダイアログ（window.print）は使わない。** ユーザーがA4に変換されて困る。
 
