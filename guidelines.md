@@ -213,15 +213,51 @@ if('IntersectionObserver' in window){
 - ヒーロー直下: 1〜2行、400ウェイト、`--text-sub`色
 - 各セクション冒頭: `letter-spacing: 0.15em; text-transform: uppercase`のラベル
 
-### 数字の見せ方
-```html
-<span style="font-size:clamp(36px,5vw,56px); font-weight:800; color:var(--accent);">
-  92<span style="font-size:0.5em;">%</span>
-</span>
-<div style="font-size:14px; color:var(--text-sub);">自動照合率</div>
+### 数字の見せ方（データカードスタイル）
+
+数字セクションでは、大きい数字 + ミニSVGチャート + トレンドバッジ + 出典を組み合わせたカードを使う（Podyスタイル）。
+
 ```
-- 数字は極大、単位は数字の半分サイズ
-- ラベルは小さく、数字の下に配置
+┌─────────────────────────┐
+│ 67%          ▼ 削減     │  ← 大きい数字 + バッジ
+│ 平均業務時間削減率       │  ← ラベル
+│ ╲_____╲____╲___         │  ← ミニSVGチャート
+│ AI化完了後、月額コストが │  ← 説明テキスト
+│ 半減。内製化でゼロも可能 │
+│ SRC: 自社調べ            │  ← 出典
+└─────────────────────────┘
+```
+
+**CSS構成:**
+```css
+.stat-card{padding:28px 20px;border-right:1px solid var(--border);background:var(--bg);transition:background .2s}
+.stat-card:hover{background:var(--bg-alt)}
+.stat-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:4px}
+.stat-num{font-size:42px;font-weight:900;line-height:1}
+.stat-num em{font-style:normal;font-size:20px;color:var(--accent)}
+.stat-badge{font-size:9px;font-weight:700;color:var(--accent);background:var(--accent-light);padding:2px 8px;border-radius:4px}
+.stat-label{font-size:13px;color:var(--text-sub);min-height:36px;margin-bottom:12px}
+.stat-chart{height:32px;margin-bottom:10px}
+.stat-desc{font-size:11px;color:var(--text-light);line-height:1.6;margin-bottom:6px}
+.stat-src{font-size:9px;color:var(--text-light);opacity:.7;text-transform:uppercase}
+```
+
+**ミニチャートの種類（インラインSVG）:**
+- **プログレスバー**: 割合を示す（78%の経営者が兼任、等）
+- **折れ線グラフ**: トレンドを示す（コスト推移、等）
+- **横棒グラフ**: 比較を示す（媒体 vs RPO vs 紹介の費用、等）
+- **ドーナツチャート**: 割合を視覚化（70%が自動化可能、等）
+- **タイムライン**: 段階を示す（BPO → AI構築 → 納品、等）
+- **シールドアイコン**: セキュリティ（0件インシデント、等）
+
+**ルール:**
+- チャートは装飾ではなく、数字の意味を補強するものを選ぶ
+- 色はアクセントカラーのopacity違いで階調を表現
+- 高さは32pxに統一
+- SVGはインラインで記述（外部ファイル禁止）
+- ホバーで背景色が変わるインタラクション付き
+- 出典がある場合は`SRC:`プレフィックスで記載
+- バッジは「▼ 削減」「深刻」「最短」等、数字の文脈を示す1-2語
 
 ## 7. デプロイ
 
